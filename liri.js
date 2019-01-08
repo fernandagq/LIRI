@@ -36,10 +36,8 @@ function movieInfo(input) {
 
     var queryUrl = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
 
-
     axios.get(queryUrl).then(
         function (response) {
-
             console.log("Title: " + response.data.Title);
             console.log("Release Year: " + response.data.Year);
             console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
@@ -49,7 +47,6 @@ function movieInfo(input) {
             console.log("Actors " + response.data.Actors);
         }
     );
-
 };
 
 
