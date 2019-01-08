@@ -8,7 +8,7 @@ var command= process.argv[2]
 
 var input= process.argv[3];
 
-function songInfo(){
+function songInfo(input){
 
 
 var Spotify = require('node-spotify-api');
@@ -32,7 +32,7 @@ spotify.search({ type: 'track', query: input }, function (err, data) {
 
 var axios = require("axios");
 
-function movieInfo() {
+function movieInfo(input) {
 
     var queryUrl = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
 
@@ -54,7 +54,7 @@ function movieInfo() {
 
 
 // Band Request Function
-function bandInfo() {
+function bandInfo(input) {
 
     var queryUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
 
@@ -79,25 +79,26 @@ fs.readFile("random.txt", "utf8", function(error, data){
 
     var dataArr = data.split(",");
 
-    console.log(dataArr);
-
-    console.log("node liri.js " + dataArr);
-    
+    if (dataArr[0]==="spotify-this-song"){
+        var check = dataArr[1].slice(1,-1);
+        songInfo(check);
+    }
+   
 })
 }
     
 
 switch (command){
     case "concert-this":
-    bandInfo();
+    bandInfo(input);
     break;
     
     case "spotify-this-song":
-    songInfo();
+    songInfo(input);
     break;
 
     case "movie-this":
-    movieInfo();
+    movieInfo(input);
     break;
 
     case "do-what-it-says":
