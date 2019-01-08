@@ -1,15 +1,12 @@
 require("dotenv").config();
-var band="node liri.js concert-this <artist/band name here>" ;
-var song="node liri.js spotify-this-song <song name here>";
-var movie="node liri.js movie-this <movie name here>" ;
 
-var doThis = "node liri.js do-what-it-says";
+var fs=require("fs");
 
 var keys = require("./keys.js");
 
-var input= process.argv[2];
+var command= process.argv[2]
 
-var choice= process.argv[3];
+var input= process.argv[3];
 
 function songInfo(){
 
@@ -24,8 +21,11 @@ spotify.search({ type: 'track', query: input }, function (err, data) {
     if (err) {
         return console.log('Error occurred: ' + err);
     }
+    console.log("Artist(s): " + data.tracks.items[0].artists[0].name);
+    console.log("Song Name: " + data.tracks.items[0].name)
+    console.log("Spotify Preview Link: " + data.tracks.items[0].href)
+    console.log("Album: " + data.tracks.items[0].album.name)
 
-    console.log(data);
 });
 };
 
@@ -34,10 +34,7 @@ var axios = require("axios");
 
 function movieInfo() {
 
-    var movieName = process.argv[2];
-
-
-    var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    var queryUrl = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
 
 
     axios.get(queryUrl).then(
@@ -59,24 +56,52 @@ function movieInfo() {
 // Band Request Function
 function bandInfo() {
 
-    var artist = process.argv[2];
-
-    var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
+    var queryUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
 
 
     axios.get(queryUrl).then(function (response) {
             
-            console.log(response.data[0].venue.name);
+            console.log("Venue Name: " + response.data[0].venue.name);
+            console.log("Venue Location: " + response.data[0].venue.city)
+            console.log("Date of Event: " + response.data[0].datetime)
+            
         }
     );
 }
+
+function doThis(){
+fs.readFile("random.txt", "utf8", function(error, data){
+    if (error){
+        return console.log(error);
+    }
+
+    // console.log(data);
+
+    var dataArr = data.split(",");
+
+    console.log(dataArr);
+
+    console.log("node liri.js " + dataArr);
+    
+})
+}
     
 
-if (input===band){
+switch (command){
+    case "concert-this":
     bandInfo();
-}else if (input===song){
+    break;
+    
+    case "spotify-this-song":
     songInfo();
+    break;
 
-}else if (input===movie){
+    case "movie-this":
     movieInfo();
+    break;
+
+    case "do-what-it-says":
+    doThis();
+    break;
+
 }
