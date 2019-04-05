@@ -1,4 +1,4 @@
-# liri-node-app
+# LIRI
 Liri is a language interpretation and recognition interface. It works by taking in command line four different commands and outputs the information relevant to the commands. 
 
 Command 1: concert-this 
